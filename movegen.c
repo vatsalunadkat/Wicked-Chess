@@ -196,7 +196,30 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list) {
 	pce = LoopSlidePce[pceIndex++];
 	while( pce != 0) {
 		ASSERT(PieceValid(pce));
-		printf("sliders pceIndex:%d pce:%d\n",pceIndex,pce);
+		printf("sliders pceIndex:%d pce:%d\n",pceIndex,pce);		
+		
+		for(pceNum = 0; pceNum < pos->pceNum[pce]; ++pceNum) {
+			sq = pos->pList[pce][pceNum];
+			ASSERT(SqOnBoard(sq));
+			printf("Piece:%c on %s\n",PceChar[pce],PrSq(sq));
+			
+			for(index = 0; index < NumDir[pce]; ++index) {
+				dir = PceDir[pce][index];
+				t_sq = sq + dir;
+				
+				while(!SQOFFBOARD(t_sq)) {				
+					// BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+					if(pos->pieces[t_sq] != EMPTY) {
+						if( PieceCol[pos->pieces[t_sq]] == side ^ 1) {
+							printf("\t\tCapture on %s\n",PrSq(t_sq));
+						}
+						break;
+					}	
+					printf("\t\tNormal on %s\n",PrSq(t_sq));
+					t_sq += dir;
+				}
+			}
+		}
 		
 		pce = LoopSlidePce[pceIndex++];
 	}
