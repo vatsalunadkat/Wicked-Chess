@@ -20,10 +20,6 @@ void UpdateListsMaterial(S_BOARD *pos) {
 			
 			pos->material[colour] += PieceVal[piece];
 			
-			/* piece list		*/
-			/* pList[wP][0] = a1;	*/
-			/* pList[wP][1] = a2;	*/
-			
 			pos->pList[piece][pos->pceNum[piece]] = sq;
 			pos->pceNum[piece]++;
 			
