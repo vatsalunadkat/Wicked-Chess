@@ -1,12 +1,13 @@
+// init.c
+
 #include "defs.h"
 #include "stdlib.h"
 
-/* filling 64 bits with random numbers */
-#define RAND_64 ( (U64)rand() + \
-		  (U64)rand() << 15 + \
-		  (U64)rand() << 30 + \
-		  (U64)rand() << 45 + \
-		  ((U64)rand() & 0xf) << 60 )
+#define RAND_64 ((U64)rand() + \
+		(U64)rand() << 15 + \
+		(U64)rand() << 30 + \
+		(U64)rand() << 45 + \
+		((U64)rand() & 0xf) << 60)
 					
 
 int Sq120ToSq64[BRD_SQ_NUM];
@@ -19,7 +20,6 @@ U64 PieceKeys[13][120];
 U64 SideKey;
 U64 CastleKeys[16];
 
-/* filling variables with random numbers */
 void InitHashKeys() {
 	
 	int index = 0;
