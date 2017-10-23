@@ -24,6 +24,7 @@ typedef unsigned long long U64;
 #define BRD_SQ_NUM 120
 
 #define MAXGAMEMOVES 2048
+#define MAXPOSITIONMOVES 256
 
 #define START_FEN  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
@@ -52,6 +53,11 @@ typedef struct {
 	int move;
 	int score;
 } S_MOVE;
+
+typedef struct {
+	S_MOVE moves[MAXPOSITIONMOVES];
+	int count;
+} S_MOVELIST;
 
 typedef struct {
 	
