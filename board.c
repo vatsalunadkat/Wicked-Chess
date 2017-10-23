@@ -69,6 +69,41 @@ int Parse_Fen(char *fen, S_BOARD *pos) {
 		fen++;
 	}
 	
+	ASSERT(*fen == 'w' || *fen == 'b');
+	
+	pos->side = (*fen == 'w') ? WHITE : BLACK;
+	fen += 2;
+	
+	for (i = 0; i < 4; i++) {
+        if (*fen == ' ') {
+            break;
+        }		
+		switch(*fen) {
+			case 'K': pos->castlePerm |= WKCA; break;
+			case 'Q': pos->castlePerm |= WQCA; break;
+			case 'k': pos->castlePerm |= BKCA; break;
+			case 'q': pos->castlePerm |= BQCA; break;
+			default:	     break;
+        }
+		fen++;
+	}
+	fen++;
+	
+	ASSERT(pos->castlePerm>=0 && pos->castlePerm <= 15);
+	
+	if (*fen != '-') {        
+		file = fen[0] - 'a';
+		rank = fen[1] - '1';
+		
+		ASSERT(file>=FILE_A && file <= FILE_H);
+		ASSERT(rank>=RANK_1 && rank <= RANK_8);
+		
+		pos->enPas = FR2SQ(file,rank);		
+    }
+	
+	pos->posKey = GeneratePosKey(pos); 
+	
+	return 0;
 }
 
 void ResetBoard(S_BOARD *pos) {
