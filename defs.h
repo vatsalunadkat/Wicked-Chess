@@ -195,6 +195,14 @@ extern int SqAttacked(const int sq, const int side, const S_BOARD *pos);
 extern char *PrMove(const int move);
 extern char *PrSq(const int sq);
 
+//validate.c
+extern int SqOnBoard(const int sq);
+extern int SideValid(const int side);
+extern int FileRankValid(const int fr);
+extern int PieceValidEmpty(const int pce);
+extern int PieceValid(const int pce);
+
+
 #endif
 
 

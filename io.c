@@ -4,11 +4,13 @@
 #include "defs.h"
 
 char *PrSq(const int sq) {
-	
+
 	static char SqStr[3];
 	
 	int file = FilesBrd[sq];
 	int rank = RanksBrd[sq];
+	
+	
 	
 	sprintf(SqStr, "%c%c", ('a'+file), ('1'+rank));
 	
