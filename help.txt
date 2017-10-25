@@ -1,0 +1,53 @@
+Gerbil Chess Engine
+http://web.archive.org/web/20070607151211/www.brucemo.com/compchess/gerbil/index.htm
+
+Dr. Robert Hyatt's home page
+http://www.cis.uab.edu/hyatt/hyatt.html
+
+CCRL 40/40
+http://computerchess.org.uk/ccrl/4040/
+
+Stockfish Chess Engine
+http://stockfishchess.org/
+
+Tom Kerrigan's Simple Chess Program
+http://www.tckerrigan.com/Chess/TSCP
+
+TalkChess Forum
+http://talkchess.com/forum/index.php
+
+ChessProgramming Wikispace
+https://chessprogramming.wikispaces.com/
+https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation
+
+Winboard GUI
+http://www.open-aurec.com/wbforum/viewtopic.php?f=19&t=51528
+
+Arena GUI
+http://playwitharena.com/
+
+BlueFeverSoft
+http://bluefever.net/
+https://chessprogramming.wikispaces.com/BlueFeverSoft
+https://www.youtube.com/user/BlueFeverSoft
+
+UCI Protocol
+http://wbec-ridderkerk.nl/html/UCIProtocol.html﻿
+
+FEN Notation
+https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation
+https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
+
+General C Programming
+https://www.youtube.com/user/mycodeschool
+https://www.youtube.com/user/thenewboston
+https://www.youtube.com/user/BlueFeverSoft
+https://www.youtube.com/user/derekbanas
+
+YouTube
+https://www.youtube.com/user/TheChernoProject
+https://www.youtube.com/playlist?list=PLlrATfBNZ98fqE45g3jZA_hLGUrD4bo6_
+https://www.youtube.com/user/jonathanwarkentin
+https://www.youtube.com/user/amir650
+https://www.youtube.com/user/thechesswebsite
+https://www.youtube.com/user/kingscrusher
