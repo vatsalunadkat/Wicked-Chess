@@ -132,8 +132,6 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list) {
 	int index = 0;
 	int pceIndex = 0;
 	
-	printf("\n\nSide:%d\n",side);
-	
 	if(side == WHITE) {
 		
 		for(pceNum = 0; pceNum < pos->pceNum[wP]; ++pceNum) {
@@ -196,7 +194,7 @@ void GenerateAllMoves(const S_BOARD *pos, S_MOVELIST *list) {
 			} 
 			
 			if(!SQOFFBOARD(sq - 11) && PieceCol[pos->pieces[sq - 11]] == WHITE) {
-				AddBlackPawnCapMove(pos, sq, sq-11, pos->pieces[sq - 1], list);
+				AddBlackPawnCapMove(pos, sq, sq-11, pos->pieces[sq - 11], list);
 			} 
 			
 			if(sq - 9 == pos->enPas) {

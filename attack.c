@@ -16,7 +16,7 @@ int SqAttacked(const int sq, const int side, const S_BOARD *pos) {
 	ASSERT(SideValid(side));
 	ASSERT(CheckBoard(pos));
 	
-	// Pawns
+	// pawns
 	if(side == WHITE) {
 		if(pos->pieces[sq-11] == wP || pos->pieces[sq-9] == wP) {
 			return TRUE;
