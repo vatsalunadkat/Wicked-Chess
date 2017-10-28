@@ -233,7 +233,7 @@ int MakeMove(S_BOARD *pos, int move) {
 	
 		
 	if(SqAttacked(pos->KingSq[side],pos->side,pos))  {
-        // TakeMove(pos);
+        TakeMove(pos);
         return FALSE;
     }
 	
