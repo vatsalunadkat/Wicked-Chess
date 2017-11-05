@@ -1,118 +1,203 @@
-// io.c
+#include <stdio.h>
 
-#include "stdio.h"
-#include "defs.h"
+#include "io.h"
+#include "chess.h"
+#include "draggen.h"
 
-char *PrSq(const int sq) {
+/* internal variables are used to store the input */
+char ch_str_move[CH_MAX_MOV_LEN+1];
 
-	static char SqStr[3];
-	
-	int file = FilesBrd[sq];
-	int rank = RanksBrd[sq];
-	
-	
-	
-	sprintf(SqStr, "%c%c", ('a'+file), ('1'+rank));
-	
-	return SqStr;
 
-}
+/* read from the stdin row and decide whether it is a valid entry */
+char *ch_get_move(char *src, char *trg)
+{
+	ch_error = CH_NO_ERRORS;
+	*src = *trg = 0;
 
-char *PrMove(const int move) {
-
-	static char MvStr[6];
-	
-	int ff = FilesBrd[FROMSQ(move)];
-	int rf = RanksBrd[FROMSQ(move)];
-	int ft = FilesBrd[TOSQ(move)];
-	int rt = RanksBrd[TOSQ(move)];
-	
-	int promoted = PROMOTED(move);
-	
-	if(promoted) {
-		char pchar = 'q';
-		if(IsKn(promoted)) {
-			pchar = 'n';
-		} else if(IsRQ(promoted) && !IsBQ(promoted))  {
-			pchar = 'r';
-		} else if(!IsRQ(promoted) && IsBQ(promoted))  {
-			pchar = 'b';
-		}
-		sprintf(MvStr, "%c%c%c%c%c", ('a'+ff), ('1'+rf), ('a'+ft), ('1'+rt), pchar);
-	} else {
-		sprintf(MvStr, "%c%c%c%c", ('a'+ff), ('1'+rf), ('a'+ft), ('1'+rt));
+	/* retrieving a command to try to close the entry */
+	fgets(ch_str_move, CH_MAX_MOV_LEN, stdin);
+	if (feof(stdin) != 0) {
+		ch_error = CH_END_OF_FILE;
+		return NULL;
 	}
-	
-	return MvStr;
-}
 
-int ParseMove(char *ptrChar, S_BOARD *pos) {
-
-	if(ptrChar[1] > '8' || ptrChar[1] < '1') return NOMOVE;
-    if(ptrChar[3] > '8' || ptrChar[3] < '1') return NOMOVE;
-    if(ptrChar[0] > 'h' || ptrChar[0] < 'a') return NOMOVE;
-    if(ptrChar[2] > 'h' || ptrChar[2] < 'a') return NOMOVE;
-
-    int from = FR2SQ(ptrChar[0] - 'a', ptrChar[1] - '1');
-    int to = FR2SQ(ptrChar[2] - 'a', ptrChar[3] - '1');	
-	
-	ASSERT(SqOnBoard(from) && SqOnBoard(to));
-	
-	S_MOVELIST list[1];
-    GenerateAllMoves(pos,list);      
-    int MoveNum = 0;
-	int Move = 0;
-	int PromPce = EMPTY;
-	
-	for(MoveNum = 0; MoveNum < list->count; ++MoveNum) {	
-		Move = list->moves[MoveNum].move;
-		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
-			PromPce = PROMOTED(Move);
-			if(PromPce!=EMPTY) {
-				if(IsRQ(PromPce) && !IsBQ(PromPce) && ptrChar[4]=='r') {
-					return Move;
-				} else if(!IsRQ(PromPce) && IsBQ(PromPce) && ptrChar[4]=='b') {
-					return Move;
-				} else if(IsRQ(PromPce) && IsBQ(PromPce) && ptrChar[4]=='q') {
-					return Move;
-				} else if(IsKn(PromPce)&& ptrChar[4]=='n') {
-					return Move;
-				}
-				continue;
+	/* input analysis */
+	switch (ch_str_move[0]) {
+		/* free */
+		case '\0':
+			return NULL;
+			break;
+		/* one */
+		case '\\':
+			/* returns the pointer to the start of the command string */
+			return (ch_str_move+1);
+			break;
+		default:
+			/* tests the boundaries of the source field */
+			if (ch_str_move[0] < 'a' || ch_str_move[0] > 'h' ||
+					ch_str_move[1] < '1' || ch_str_move[1] > '8') {
+				ch_error = CH_ILLEGAL_MOVE;
+				return NULL;
 			}
-			return Move;
-		}
-    }
-	
-    return NOMOVE;	
-}
+			/* calculation of field index (specified source coordinates) */
+			*src = ch_str_move[0]-'a'+1 + (ch_str_move[1]-'0'+1)*10;
 
-void PrintMoveList(const S_MOVELIST *list) {
-	int index = 0;
-	int score = 0;
-	int move = 0;
-	printf("MoveList:\n",list->count);
-	
-	for(index = 0; index < list->count; ++index) {
-	
-		move = list->moves[index].move;
-		score = list->moves[index].score;
-		
-		printf("Move:%d > %s (score:%d)\n",index+1,PrMove(move),score);
+			/* tests the boundary of the target field */
+			if (ch_str_move[2] < 'a' || ch_str_move[3] > 'h' ||
+					ch_str_move[3] < '1' || ch_str_move[3] > '8') {
+				ch_error = CH_ILLEGAL_MOVE;
+				return NULL;
+			}
+			/* calculation of field index (specified target coordinates) */
+			*trg = ch_str_move[2]-'a'+1 + (ch_str_move[3]-'0'+1)*10;
+			break;
 	}
-	printf("MoveList Total %d Moves:\n\n",list->count);
+
+	return NULL;
 }
 
+/* value print */
+void ch_board_print_figure_place(ch_board *board)
+{
+	int i = 0, j = 0;
 
+	ch_error = CH_NO_ERRORS;
 
+	if (board == NULL) {
+		ch_error = CH_NULL_POINTER;
+		return;
+	}
 
+	/* print */
+	printf("\nMove Number: %d\n", board->move);
+	printf("    a    b    c    d    e    f    g    h\n");
+	printf("-------------------------------------------\n");
+	for (j = 90; j > 10; j -= 10) {
+		printf("%d|", (j / 10) - 1);
+		for (i = 1; i < 9; i++)
+			(board->board[j + i].figure != NULL) ?
+				printf("%3d |", (int)board->board[j+i].figure->type) :
+				printf("    |");
+		printf("%d\n", (j / 10) - 1);
+		printf("-------------------------------------------\n");
+	}
+	printf("    a    b    c    d    e    f    g    h\n");
+}
 
+/* all possible strokes */
+void ch_print_moves(ch_board *board)
+{
+	ch_move *move = NULL;
 
+	if (board == NULL || board->node == NULL ||
+			board->node->first == NULL || board->node->data == NULL) {
+		ch_error = CH_NULL_POINTER;
+		return;
+	}
 
+	board->node->actual = board->node->first;
+	while (board->node->actual != NULL) {
+		move = (ch_move*)(board->node->actual->data);
+		printf("F%d,S%d,T%d,C%d,", board->board[(int)move->src].figure->type,move->src, 
+				move->trg, move->cost);
+		if (move->take != NULL) {
+			printf("take%d; ", move->take->type);
+		} else
+			printf("take0; ");
+		board->node->actual = board->node->actual->next;
+	}
+	putchar('\n');
+	board->node->actual = board->node->first;
+}
 
+/* List the values of the playing field itself */
+void ch_board_print_center_table(ch_board *board)
+{
+	int i = 0, j = 0;
 
+	ch_error = CH_NO_ERRORS;
+	if (board == NULL) {
+		ch_error = CH_NULL_POINTER;
+		return;
+	}
+	/* printing table */
+	putchar('\n');
+	for (j = 90; j > 10; j -= 10) {
+		for (i = 1; i < 9; i++)
+			printf("%2d", (int)board->board[j+i].value);
+		putchar('\n');
+	}
+	putchar('\n');
+}
 
+/* write a simple table of playing fields */
+/* where is the figure, then write their value */
+void ch_board_print_figure_value(ch_board *board)
+{
+	int i = 0, j = 0;
 
+	ch_error = CH_NO_ERRORS;
+	if (board == NULL) {
+		ch_error = CH_NULL_POINTER;
+		return;
+	}
 
+	/* printing the table */
+	putchar('\n');
+	for (j = 90; j > 10; j -= 10) {
+		for (i = 1; i < 9; i++)
+			(board->board[j+i].figure != NULL) ?
+				printf("%5d", (int)board->board[j+i].figure->value) :
+				printf("     ");
+		putchar('\n');
+	}
+	putchar('\n');
+}
 
+/* type the types of black and white figures */
+/* suitable for testing correct initialization */
+void ch_board_figure_print(ch_board *board)
+{
+	int i = 0;
 
+	ch_error = CH_NO_ERRORS;
+	if (board == NULL) {
+		ch_error = CH_NULL_POINTER;
+		return;
+	}
+
+	/* List of figures in the game */
+	putchar('\n');
+	for (i = 0; i < 16; i++) {
+		printf("white: %d\n", (int)board->white[i].type);
+		printf("black: %d\n", (int)board->black[i].type);
+	}
+	putchar('\n');
+}
+
+/* the function of error */
+void ch_print_error(void)
+{
+	/* ending the entry is not taken as a bug, */
+	/* but as a property - the possibility of ending the game with help of ^D. */
+	if (ch_error == CH_END_OF_FILE) {
+		ch_error = CH_NO_ERRORS;
+		return;
+	}
+	/* own bug reports */
+	printf("ERROR: ");
+	switch (ch_error) {
+		case CH_NOT_MEM:
+			printf("can not allocate enough memmory\n");
+			break;
+		case CH_NULL_POINTER:
+			printf("reference pointer is null\n");
+			break;
+		case CH_ILLEGAL_MOVE:
+			printf("illegal move\n");
+			break;
+		default:
+			printf("no errors\n");
+			break;
+	}
+}

@@ -38,20 +38,12 @@ FEN Notation
 https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation
 https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
 
-General C Programming (very basic stuff)
-https://www.programiz.com/c-programming
-http://www.geeksforgeeks.org/c/
-https://www.tutorialspoint.com/cprogramming/
-https://www.youtube.com/user/mycodeschool
-https://www.youtube.com/user/thenewboston
-https://www.youtube.com/user/BlueFeverSoft
-https://www.youtube.com/user/derekbanas
-
 YouTube
 https://www.youtube.com/user/TheChernoProject
 https://www.youtube.com/playlist?list=PLlrATfBNZ98fqE45g3jZA_hLGUrD4bo6_
 https://www.youtube.com/user/jonathanwarkentin
 https://www.youtube.com/user/amir650
+https://www.youtube.com/user/BlueFeverSoft
 https://www.youtube.com/user/thechesswebsite
 https://www.youtube.com/user/kingscrusher
 
@@ -67,4 +59,3 @@ The Chess Computer Handbook. David Levy. Batsford. 1984.
 Papers
 Tony Marsland (1992). Computer Chess and Search. Encyclopedia of Artificial Intelligence (2nd ed.) (ed. S.C. Shapiro) pp. 224-241. John Wiley & Sons, Inc., New York, NY. ISBN 0-471-50305-3.
 Marek Strejczek (2004). Some aspects of chess programming. Technical University of Łódź, Faculty of Electrical and Electronic Engineering, Department of Computer Science, Supervisor Maciej Szmit.
-
